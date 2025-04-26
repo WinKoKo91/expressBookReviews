@@ -20,6 +20,13 @@ public_users.post("/register", (req, res) => {
   return res.status(200).json({ message: "User registered successfully" });
 });
 
+//Task 10
+const getBooks = () => {
+  return new Promise((resolve, reject) => {
+    resolve(books);
+  });
+};
+
 // Get the book list available in the shop
 public_users.get("/", function (req, res) {
   getBooks().then(
@@ -28,47 +35,7 @@ public_users.get("/", function (req, res) {
   );
 });
 
-// Get book details based on ISBN
-public_users.get("/isbn/:isbn", function (req, res) {
-  getBookByISBM(req.params.isbn).then(
-    (result) => res.status(200).json({ book: result }),
-    (error) => res.status(error.status).json({ message: error.message })
-  );
-});
-
-// Get book details based on author
-public_users.get("/author/:author", function (req, res) {
-  const author = req.params.author;
-  getBookByAuthor(author).then(
-    (result) => res.status(200).json({ book: result }),
-    (error) => res.status(error.status).json({ message: error.message })
-  );
-});
-
-// Get all books based on title
-public_users.get("/title/:title", function (req, res) {
-  const title = req.params.title;
-  getBookByTitle(title).then(
-    (result) => res.status(200).json({ book: result }),
-    (error) => res.status(error.status).json({ message: error.message })
-  );
-});
-
-//  Get book review
-public_users.get("/review/:isbn", function (req, res) {
-  const book = books[req.params.isbn];
-  if (!book) {
-    return res.status(400).json({ message: "Book not found" });
-  }
-  return res.status(200).json({ review: book.reviews });
-});
-
-const getBooks = () => {
-  return new Promise((resolve, reject) => {
-    resolve(books);
-  });
-};
-
+//Task 11
 const getBookByISBM = (isbm) => {
   return new Promise((resolve, reject) => {
     const book = books[isbm];
@@ -80,6 +47,15 @@ const getBookByISBM = (isbm) => {
   });
 };
 
+// Get book details based on ISBN
+public_users.get("/isbn/:isbn", function (req, res) {
+  getBookByISBM(req.params.isbn).then(
+    (result) => res.status(200).json({ book: result }),
+    (error) => res.status(error.status).json({ message: error.message })
+  );
+});
+
+// Task 12
 const getBookByAuthor = (author) => {
   return new Promise((resolve, reject) => {
     const booksByAuthor = [];
@@ -96,6 +72,16 @@ const getBookByAuthor = (author) => {
   });
 };
 
+// Get book details based on author
+public_users.get("/author/:author", function (req, res) {
+  const author = req.params.author;
+  getBookByAuthor(author).then(
+    (result) => res.status(200).json({ book: result }),
+    (error) => res.status(error.status).json({ message: error.message })
+  );
+});
+
+// Task 13
 const getBookByTitle = (title) => {
   return new Promise((resolve, reject) => {
     const booksByTitle = [];
@@ -114,5 +100,23 @@ const getBookByTitle = (title) => {
     }
   });
 };
+
+// Get all books based on title
+public_users.get("/title/:title", function (req, res) {
+  const title = req.params.title;
+  getBookByTitle(title).then(
+    (result) => res.status(200).json({ book: result }),
+    (error) => res.status(error.status).json({ message: error.message })
+  );
+});
+
+//  Get book review
+public_users.get("/review/:isbn", function (req, res) {
+  const book = books[req.params.isbn];
+  if (!book) {
+    return res.status(400).json({ message: "Book not found" });
+  }
+  return res.status(200).json({ review: book.reviews });
+});
 
 module.exports.general = public_users;
